@@ -1,46 +1,130 @@
 [
     {
-        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "com.xpbordecostero.app-main-24:/mipmap-xhdpi/ic_launcher.png"
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-hdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-hdpi\\ic_launcher.png"
     },
     {
-        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxhdpi_ic_launcher_round.png.flat",
-        "source": "com.xpbordecostero.app-main-24:/mipmap-xxhdpi/ic_launcher_round.png"
-    },
-    {
-        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-hdpi_ic_launcher_round.png.flat",
-        "source": "com.xpbordecostero.app-main-24:/mipmap-hdpi/ic_launcher_round.png"
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-mdpi_ic_launcher_background.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-mdpi/ic_launcher_background.png"
     },
     {
         "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "com.xpbordecostero.app-main-24:/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "com.xpbordecostero.app-main-24:/mipmap-xhdpi/ic_launcher_round.png"
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xhdpi_ic_launcher_background.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xhdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xhdpi_ic_launcher_monochrome.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xhdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-mdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxhdpi_ic_launcher_background.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xxhdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-hdpi_ic_launcher_background.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-hdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-hdpi_ic_launcher_monochrome.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-hdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-xxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxhdpi_ic_launcher_monochrome.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xxhdpi/ic_launcher_monochrome.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xhdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxxhdpi_ic_launcher.png.flat",
         "source": "com.xpbordecostero.app-main-24:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-mdpi_ic_launcher_round.png.flat",
-        "source": "com.xpbordecostero.app-main-24:/mipmap-mdpi/ic_launcher_round.png"
-    },
-    {
-        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-hdpi_ic_launcher.png.flat",
-        "source": "com.xpbordecostero.app-main-24:/mipmap-hdpi/ic_launcher.png"
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-mdpi\\ic_launcher.png"
     },
     {
         "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-mdpi_ic_launcher.png.flat",
         "source": "com.xpbordecostero.app-main-24:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "com.xpbordecostero.app-merged_res-22:/drawable_rn_edit_text_material.xml.flat",
-        "source": "com.xpbordecostero.app-main-24:/drawable/rn_edit_text_material.xml"
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-mdpi_ic_launcher_monochrome.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-mdpi/ic_launcher_monochrome.png"
     },
     {
-        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
-        "source": "com.xpbordecostero.app-main-24:/mipmap-xxxhdpi/ic_launcher_round.png"
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\drawable_rn_edit_text_material.xml.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\drawable\\rn_edit_text_material.xml"
+    },
+    {
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-merged_res-22:\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\Jorge\\.gradle\\daemon\\7.5.1\\com.xpbordecostero.app-main-24:\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxxhdpi_ic_launcher_background.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xxxhdpi/ic_launcher_background.png"
+    },
+    {
+        "merged": "com.xpbordecostero.app-merged_res-22:/mipmap-xxxhdpi_ic_launcher_monochrome.png.flat",
+        "source": "com.xpbordecostero.app-main-24:/mipmap-xxxhdpi/ic_launcher_monochrome.png"
     }
 ]
