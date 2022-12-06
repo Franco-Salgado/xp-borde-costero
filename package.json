@@ -14,8 +14,10 @@
     "expo-status-bar": "~1.4.0",
     "react": "18.0.0",
     "react-native": "0.69.6",
+    "react-native-paper": "^5.0.0",
     "react-native-parallax-header": "^1.1.4",
-    "react-native-parallax-scroll-view": "^0.21.3"
+    "react-native-parallax-scroll-view": "^0.21.3",
+    "react-native-table-component": "^1.2.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
