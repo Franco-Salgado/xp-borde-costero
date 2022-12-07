@@ -1,51 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button, ScrollView, SafeAreaView, StatusBar, Dimensions } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { DataTable } from 'react-native-paper';
-import { LineChart } from "react-native-chart-kit";
+/**
+ * Sample BLE React Native App
+ *
+ * @format
+ * @flow strict-local
+ */
+ import MainStack from "./navigation/MainStack";
+import {
+  StyleSheet,
+  View,
+} from 'react-native';
+
 
 const App = () => {
-  // Variables y constantes
-  const key_sensor1 = '@Sensor1';
-  const [value, setValue] = useState();
-  const [id, setId] = useState(0);
+  return (
+  <View style={styles.background}>
+    <MainStack />
+  </View>
+  )
 
-  const [temp, setTemp] = useState();
-  const [hum, setHum] = useState();
-  const [pre, setPre] = useState();
-  const [temp2, setTemp2] = useState();
-  const [uv, setUv] = useState();
 
-  var sensor1 = [];
+/*  
+  const [isScanning, setIsScanning] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
+  const [flagS, setFlagS] = useState(true);
+  const [temp, setTemp] = useState("null");
+  const [hum, setHum] = useState("null");
+  const [pre, setPre] = useState("null");
+  const [temp2, setTemp2] = useState("null");
+  const [uv, setUv] = useState("null");
+  const [list, setList] = useState([{"id": "id", "rssi": "rssi", "name": "name"}, {"id": "id", "rssi": "rssi", "name": "name"}, {"id": "id", "rssi": "rssi", "name": "name"}]);
 
-  // Funciones de memoria
-  const setItem = async (key, dato) => {
-    try {
-      console.log('SET: ', dato);
-      await AsyncStorage.setItem(key, dato);
-    } catch(e) {
-      alert('Error al almacenar');
-    }
+  const aux = () =>{
+    setFlagS(false);
+    setIsConnected(true);
   }
-
-  const getItem = async (key) => {
-    try {
-      setValue(await AsyncStorage.getItem(key));
-      console.log('GET: ', await AsyncStorage.getItem(key));
-    } catch(e) {
-      alert('Error al recuperar');
-    }
+  const renderItem = (item) => {
+    const color = item.connected ? 'green' : '#fff';
+    return (
+      <TouchableHighlight onPress={() => aux()}>
+        <View style={[styles.row, {backgroundColor: color}]}>
+          <Text style={{fontSize: 12, textAlign: 'center', color: '#333333', padding: 10}}>{item.name}</Text>
+          <Text style={{fontSize: 10, textAlign: 'center', color: '#333333', padding: 2}}>RSSI: {item.rssi}</Text>
+          <Text style={{fontSize: 8, textAlign: 'center', color: '#333333', padding: 2, paddingBottom: 20}}>{item.id}</Text>
+        </View>
+      </TouchableHighlight>
+    );
   }
-
-  clearAll = async () => {
-    try {
-      await AsyncStorage.clear()
-    } catch(e) {
-      alert('Error en el clear')
-    }
-  }
-
-  // Funciones de los botones
   const readSensor1 = () => {
     // Toda la conexión con el sensor 1
     // ...
@@ -56,147 +56,150 @@ const App = () => {
     setHum(humedad);
     presion = Math.floor(Math.random() * 2000)
     setPre(presion);
-    if (value) {setId(JSON.parse(value)[0].id+1);}
   }
-
-  const storeSensor1 = () => {
-    const fecha = getCurrentDate();
-    if (value) {
-      sensor1 = JSON.parse(value);
-    } else {
-      sensor1 = [];
-    }
-    sensor1.unshift({'id':id, 'f':fecha, 't':temp, 'h':hum, 'p':pre});
-    setValue(JSON.stringify(sensor1));
-    setItem(key_sensor1, JSON.stringify(sensor1));
-  }
-
-  // Otros
-  const getCurrentDate = () => {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-    var hour = new Date().getHours();
-    var minute = new Date().getMinutes();
-    var seconds = new Date().getSeconds();
-    var mseconds = new Date().getMilliseconds();
-    return date + '-' + month + '-' + year + " " + hour + ":" + minute + ":" + seconds + ":" + mseconds;
-  }
-
-  useEffect(() => {
-    getItem(key_sensor1);
-    // clearAll();
-  }, [])
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={'black'} />
-        <View style={styles.data}>
-          <Button title="Tomar muestra" onPress={() => readSensor1()} />
-          {(temp && hum && pre) &&
-            <Text>{temp}[°C]   {hum}%   {pre}[Pa]</Text>}
-          <Button title="Almacenar muestra" onPress={() => storeSensor1()} />
-        </View>
-        <ScrollView style={styles.scroll}>
-          {(value) &&
-            <DataTable style={styles.table}>
-              <DataTable.Header style={styles.header}>
-                <DataTable.Title style={styles.columnId}>#</DataTable.Title>
-                <DataTable.Title style={styles.columnFecha}>Fecha</DataTable.Title>
-                <DataTable.Title style={styles.columnDato}>T[°C]</DataTable.Title>
-                <DataTable.Title style={styles.columnDato}>H[%]</DataTable.Title>
-                <DataTable.Title style={styles.columnDato}>P[Pa]</DataTable.Title>
-              </DataTable.Header>
-              {
-                JSON.parse(value).map(valor => {
-                  return (
-                    <DataTable.Row key={valor.id}>
-                      <DataTable.Cell style={styles.columnId} numeric>{valor.id}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnFecha} numeric>{valor.f}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnDato} numeric>{valor.t}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnDato} numeric>{valor.h}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnDato} numeric>{valor.p}</DataTable.Cell>
-                    </DataTable.Row>
-                  )
-                })
-              }
-            </DataTable>
-          }
+    <>
+
+
+      <StatusBar barStyle="dark-content" />
+      <View style = {styles.background}>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={styles.scrollView}>
+          {/* {global.HermesInternal == null ? null : (
+            <View style={styles.engine}>
+              <Text style={styles.footer}>Engine: Hermes</Text>
+            </View>
+          )} }
+          <View style={styles.body}>
+            
+            <View style={{margin: 10}}>
+              <Button 
+                title={'Escanear Dispositivos (' + (isScanning ? 'on' : 'off') + ')'}
+                onPress={() => setFlagS(true) } 
+              />            
+            </View>
+            {(list.length > 0 && !isConnected) &&
+              <View>
+                <Text style={{textAlign: 'center', color: Colors.white}}>Presione un dispostivo para conectar</Text>
+              </View>
+            }
+            {(list.length == 0) &&
+              <View style={{flex:1, margin: 20}}>
+                <Text style={{textAlign: 'center', color: Colors.white}}>Ningun dispostivo encontrado</Text>
+              </View>
+            }
+          </View>              
         </ScrollView>
-        <View style={styles.grafica}>
-          {(value) &&
-            <LineChart
-              data={{
-                labels: JSON.parse(value).slice(0, 10).map(valor => {
-                  return(valor.id)
-                }),
-                datasets: [
-                  {
-                    data: JSON.parse(value).slice(0, 10).map(valor => {
-                      return(valor.t)
-                    }),
-                    strokeWidth: 2
-                  },
-                ],
-              }}
-              width={Dimensions.get('window').width}
-              height={220}
-              chartConfig={{
-                backgroundColor: '#e26a00',
-                backgroundGradientFrom: '#fb8c00',
-                backgroundGradientTo: '#ffa726',
-                decimalPlaces: 2,
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {},
-                title: 'Temperatura'
-              }}
-              bezier
-              style={{}}
-            />
-          }
-        </View>
-    </SafeAreaView>
-  );
+        <SafeAreaView style={{flex: 1}}>
+          <MainStack />       
+        </SafeAreaView>
+
+
+        {(flagS) &&
+        <FlatList
+            data={list}
+            renderItem={({ item }) => renderItem(item) }
+            keyExtractor={item => item.id}
+          />
+        }
+
+        {(isConnected) &&
+          <View style={{margin: 10}}>
+            <View style={{margin: 10, flexDirection: "row"}}>
+              <View style={{flex:0.5}} />
+              <Button title='Tomar muestra' onPress={() => readSensor1()}/>
+              <View style={{flex:0.5}} />
+            </View>
+            <View style={{flex:0.1}} />
+            <Text style={{textAlign: 'center', color: Colors.white}}>Sensor Humedad, Temperatura, Presión</Text>
+            <View style={{margin: 10, flexDirection: "row"}}>
+              <View style={{flex:0.1}} />
+              <View style={{flex:1}}>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>Temperatura</Text>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>{temp}</Text>
+              </View>
+              <View style={{flex:0.1}} />
+              <View style={{flex:1}}>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>Humedad</Text>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>{hum}</Text>
+              </View>
+              <View style={{flex:0.1}} />
+              <View style={{flex:1}}>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>Presión</Text>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>{pre}</Text>
+              </View>
+              <View style={{flex:0.1}} />
+            </View>
+            <View style={{flex:0.1}} />
+            <View style={{margin: 10, flexDirection: "row"}}>
+              <View style={{flex:0.1}} />
+              <View style={{flex:1}}>
+              <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>Sensor sumergible</Text>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>Temperatura</Text>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>{temp2}</Text>
+              </View>
+              <View style={{flex:0.1}} />
+              <View style={{flex:1}}>
+              <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>Sensor UV</Text>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>UV</Text>
+                <Text style={{fontSize: 12, textAlign: 'center', color: Colors.white, padding: 10}}>{uv}</Text>
+              </View>
+              <View style={{flex:0.1}} />
+            </View>
+          </View>
+        }       
+
+      </View>
+      
+    </>
+  
+  );*/
 };
 
-export default () => (
-  <App />
-);
-
 const styles = StyleSheet.create({
-  container: {
+  background: {
+    backgroundColor: "#404040",
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center'
   },
-  data: {
-    paddingVertical: 25
+  /*
+  scrollView: {
+    backgroundColor: "#404040",
   },
-  scroll: {
-    height: 100,
-    alignSelf:'stretch',
-    paddingHorizontal: 5
+  engine: {
+    position: 'absolute',
+    right: 0,
   },
-  table: {
-    borderStartColor: 'solid',
-    borderColor: 'white'
+  body: {
+    backgroundColor: "#404040",
   },
-  columnFecha: {
-    flex: 50,
-    justifyContent: 'center'
+  sectionContainer: {
+    marginTop: 32,
+    paddingHorizontal: 24,
   },
-  columnDato: {
-    flex: 12,
-    justifyContent: 'center'
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: Colors.black,
   },
-  columnId: {
-    flex: 5,
-    justifyContent: 'center'
+  sectionDescription: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+    color: Colors.dark,
   },
-  header: {
-    backgroundColor: '#DCDCDC'
+  highlight: {
+    fontWeight: '700',
   },
-  grafica: {
-    padding: 0
-  }
+  footer: {
+    color: Colors.dark,
+    fontSize: 12,
+    fontWeight: '600',
+    padding: 4,
+    paddingRight: 12,
+    textAlign: 'right',
+  },*/
 });
+
+export default App;
