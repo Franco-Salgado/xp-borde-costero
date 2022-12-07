@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Button, ScrollView, SafeAreaView, StatusBar, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DataTable } from 'react-native-paper';
-import { LineChart, BarChart, PieChart, ProgressChart, ContributionGraph, StackedBarChart } from "react-native-chart-kit";
+import { LineChart } from "react-native-chart-kit";
 
 const App = () => {
   // Variables y constantes
   const key_sensor1 = '@Sensor1';
-  const key_sensor2 = '@Sensor2';
   const [value, setValue] = useState();
+  const [id, setId] = useState(0);
 
   const [temp, setTemp] = useState();
   const [hum, setHum] = useState();
@@ -16,16 +16,13 @@ const App = () => {
   const [temp2, setTemp2] = useState();
   const [uv, setUv] = useState();
 
-  // var sensor1 = {'t':[], 'h':[], 'p':[]}
   var sensor1 = [];
-  var sensor2 = {};
 
   // Funciones de memoria
   const setItem = async (key, dato) => {
     try {
+      console.log('SET: ', dato);
       await AsyncStorage.setItem(key, dato);
-      console.log('SET: ', dato)
-      alert('Dato almacenado');
     } catch(e) {
       alert('Error al almacenar');
     }
@@ -40,6 +37,14 @@ const App = () => {
     }
   }
 
+  clearAll = async () => {
+    try {
+      await AsyncStorage.clear()
+    } catch(e) {
+      alert('Error en el clear')
+    }
+  }
+
   // Funciones de los botones
   const readSensor1 = () => {
     // Toda la conexión con el sensor 1
@@ -51,14 +56,19 @@ const App = () => {
     setHum(humedad);
     presion = Math.floor(Math.random() * 2000)
     setPre(presion);
+    if (value) {setId(JSON.parse(value)[0].id+1);}
   }
 
   const storeSensor1 = () => {
     const fecha = getCurrentDate();
-    sensor1 = JSON.parse(value);
-    sensor1.push({'f':fecha, 't':temp, 'h':hum, 'p':pre});
+    if (value) {
+      sensor1 = JSON.parse(value);
+    } else {
+      sensor1 = [];
+    }
+    sensor1.unshift({'id':id, 'f':fecha, 't':temp, 'h':hum, 'p':pre});
     setValue(JSON.stringify(sensor1));
-    setItem(key_sensor1, value);
+    setItem(key_sensor1, JSON.stringify(sensor1));
   }
 
   // Otros
@@ -73,30 +83,9 @@ const App = () => {
     return date + '-' + month + '-' + year + " " + hour + ":" + minute + ":" + seconds + ":" + mseconds;
   }
 
-  const line = () => {
-    JSON.parse(value).map(valor => {
-      const linedata = {
-        labels: [valor.f],
-        datasets: [{
-          data: [],
-          strokeWidth: 2
-        }]
-      }
-    })
-  }
-
-  const linedata = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 99, 43],
-        strokeWidth: 2, // optional
-      },
-    ],
-  };
-
   useEffect(() => {
     getItem(key_sensor1);
+    // clearAll();
   }, [])
 
   return (
@@ -112,6 +101,7 @@ const App = () => {
           {(value) &&
             <DataTable style={styles.table}>
               <DataTable.Header style={styles.header}>
+                <DataTable.Title style={styles.columnId}>#</DataTable.Title>
                 <DataTable.Title style={styles.columnFecha}>Fecha</DataTable.Title>
                 <DataTable.Title style={styles.columnDato}>T[°C]</DataTable.Title>
                 <DataTable.Title style={styles.columnDato}>H[%]</DataTable.Title>
@@ -120,7 +110,8 @@ const App = () => {
               {
                 JSON.parse(value).map(valor => {
                   return (
-                    <DataTable.Row key={valor.f}>
+                    <DataTable.Row key={valor.id}>
+                      <DataTable.Cell style={styles.columnId} numeric>{valor.id}</DataTable.Cell>
                       <DataTable.Cell style={styles.columnFecha} numeric>{valor.f}</DataTable.Cell>
                       <DataTable.Cell style={styles.columnDato} numeric>{valor.t}</DataTable.Cell>
                       <DataTable.Cell style={styles.columnDato} numeric>{valor.h}</DataTable.Cell>
@@ -132,22 +123,38 @@ const App = () => {
             </DataTable>
           }
         </ScrollView>
-        <LineChart
-            data={linedata}
-            width={Dimensions.get('window').width} // from react-native
-            height={220}
-            yAxisLabel={'$'}
-            chartConfig={{
-              backgroundColor: '#e26a00',
-              backgroundGradientFrom: '#fb8c00',
-              backgroundGradientTo: '#ffa726',
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {}
-            }}
-            bezier
-            style={{}}
-          />
+        <View style={styles.grafica}>
+          {(value) &&
+            <LineChart
+              data={{
+                labels: JSON.parse(value).slice(0, 10).map(valor => {
+                  return(valor.id)
+                }),
+                datasets: [
+                  {
+                    data: JSON.parse(value).slice(0, 10).map(valor => {
+                      return(valor.t)
+                    }),
+                    strokeWidth: 2
+                  },
+                ],
+              }}
+              width={Dimensions.get('window').width}
+              height={220}
+              chartConfig={{
+                backgroundColor: '#e26a00',
+                backgroundGradientFrom: '#fb8c00',
+                backgroundGradientTo: '#ffa726',
+                decimalPlaces: 2,
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                style: {},
+                title: 'Temperatura'
+              }}
+              bezier
+              style={{}}
+            />
+          }
+        </View>
     </SafeAreaView>
   );
 };
@@ -175,16 +182,21 @@ const styles = StyleSheet.create({
     borderColor: 'white'
   },
   columnFecha: {
-    flex: 5,
-    alignItems: 'center',
+    flex: 50,
     justifyContent: 'center'
   },
   columnDato: {
-    flex: 1,
-    alignItems: 'center',
+    flex: 12,
+    justifyContent: 'center'
+  },
+  columnId: {
+    flex: 5,
     justifyContent: 'center'
   },
   header: {
     backgroundColor: '#DCDCDC'
+  },
+  grafica: {
+    padding: 0
   }
 });
