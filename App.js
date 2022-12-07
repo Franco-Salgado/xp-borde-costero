@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button, ScrollView, SafeAreaView, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, Button, ScrollView, SafeAreaView, StatusBar, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DataTable } from 'react-native-paper';
+import { LineChart, BarChart, PieChart, ProgressChart, ContributionGraph, StackedBarChart } from "react-native-chart-kit";
 
 const App = () => {
   // Variables y constantes
@@ -18,7 +19,6 @@ const App = () => {
   // var sensor1 = {'t':[], 'h':[], 'p':[]}
   var sensor1 = [];
   var sensor2 = {};
-  var dia = 2;
 
   // Funciones de memoria
   const setItem = async (key, dato) => {
@@ -54,22 +54,46 @@ const App = () => {
   }
 
   const storeSensor1 = () => {
-    getItem(key_sensor1);
+    const fecha = getCurrentDate();
     sensor1 = JSON.parse(value);
-    sensor1.push({'f':dia, 't':temp, 'h':hum, 'p':pre});
-    console.log('SENSOR: ', sensor1);
-    setItem(key_sensor1, JSON.stringify(sensor1));
+    sensor1.push({'f':fecha, 't':temp, 'h':hum, 'p':pre});
+    setValue(JSON.stringify(sensor1));
+    setItem(key_sensor1, value);
   }
 
-  // Construcción de la tabla
-  // const objectMap = (obj, fn) => {
-  //   Object.fromEntries(
-  //     Object.entries(obj).map(
-  //       ([k, v], i) => [k, fn(v, k, i)]
-  //     )
-  //   )
-  // }
-  
+  // Otros
+  const getCurrentDate = () => {
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+    var hour = new Date().getHours();
+    var minute = new Date().getMinutes();
+    var seconds = new Date().getSeconds();
+    var mseconds = new Date().getMilliseconds();
+    return date + '-' + month + '-' + year + " " + hour + ":" + minute + ":" + seconds + ":" + mseconds;
+  }
+
+  const line = () => {
+    JSON.parse(value).map(valor => {
+      const linedata = {
+        labels: [valor.f],
+        datasets: [{
+          data: [],
+          strokeWidth: 2
+        }]
+      }
+    })
+  }
+
+  const linedata = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    datasets: [
+      {
+        data: [20, 45, 28, 80, 99, 43],
+        strokeWidth: 2, // optional
+      },
+    ],
+  };
 
   useEffect(() => {
     getItem(key_sensor1);
@@ -88,19 +112,19 @@ const App = () => {
           {(value) &&
             <DataTable style={styles.table}>
               <DataTable.Header style={styles.header}>
-                <DataTable.Title>Fecha</DataTable.Title>
-                <DataTable.Title>Temperatura [°C]</DataTable.Title>
-                <DataTable.Title>Humedad [%]</DataTable.Title>
-                <DataTable.Title>Presión [Pa]</DataTable.Title>
+                <DataTable.Title style={styles.columnFecha}>Fecha</DataTable.Title>
+                <DataTable.Title style={styles.columnDato}>T[°C]</DataTable.Title>
+                <DataTable.Title style={styles.columnDato}>H[%]</DataTable.Title>
+                <DataTable.Title style={styles.columnDato}>P[Pa]</DataTable.Title>
               </DataTable.Header>
               {
                 JSON.parse(value).map(valor => {
                   return (
                     <DataTable.Row key={valor.f}>
-                      <DataTable.Cell numeric>{valor.f}</DataTable.Cell>
-                      <DataTable.Cell numeric>{valor.t}</DataTable.Cell>
-                      <DataTable.Cell numeric>{valor.h}</DataTable.Cell>
-                      <DataTable.Cell numeric>{valor.p}</DataTable.Cell>
+                      <DataTable.Cell style={styles.columnFecha} numeric>{valor.f}</DataTable.Cell>
+                      <DataTable.Cell style={styles.columnDato} numeric>{valor.t}</DataTable.Cell>
+                      <DataTable.Cell style={styles.columnDato} numeric>{valor.h}</DataTable.Cell>
+                      <DataTable.Cell style={styles.columnDato} numeric>{valor.p}</DataTable.Cell>
                     </DataTable.Row>
                   )
                 })
@@ -108,6 +132,22 @@ const App = () => {
             </DataTable>
           }
         </ScrollView>
+        <LineChart
+            data={linedata}
+            width={Dimensions.get('window').width} // from react-native
+            height={220}
+            yAxisLabel={'$'}
+            chartConfig={{
+              backgroundColor: '#e26a00',
+              backgroundGradientFrom: '#fb8c00',
+              backgroundGradientTo: '#ffa726',
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {}
+            }}
+            bezier
+            style={{}}
+          />
     </SafeAreaView>
   );
 };
@@ -128,11 +168,21 @@ const styles = StyleSheet.create({
   scroll: {
     height: 100,
     alignSelf:'stretch',
-    paddingHorizontal: 25
+    paddingHorizontal: 5
   },
   table: {
     borderStartColor: 'solid',
     borderColor: 'white'
+  },
+  columnFecha: {
+    flex: 5,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  columnDato: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   header: {
     backgroundColor: '#DCDCDC'
