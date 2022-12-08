@@ -16,6 +16,8 @@ const App = () => {
   const [temp2, setTemp2] = useState();
   const [uv, setUv] = useState();
 
+  const [graf, setGraf] = useState('temp');
+
   var sensor1 = [];
 
   // Funciones de memoria
@@ -71,7 +73,6 @@ const App = () => {
     setItem(key_sensor1, JSON.stringify(sensor1));
   }
 
-  // Otros
   const getCurrentDate = () => {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
@@ -83,6 +84,108 @@ const App = () => {
     return date + '-' + month + '-' + year + " " + hour + ":" + minute + ":" + seconds + ":" + mseconds;
   }
 
+  // Gráfica
+  const renderGrafica = (vDep) => {
+    switch (vDep) {
+      case 'temp':
+        return (
+          <LineChart
+            data={{
+              labels: JSON.parse(value).slice(0, 10).map(valor => {
+                return(valor.id)
+              }),
+              datasets: [
+                {
+                  data: JSON.parse(value).slice(0, 10).map(valor => {
+                    return(valor.t)
+                  }),
+                  strokeWidth: 2
+                },
+              ],
+            }}
+            width={Dimensions.get('window').width}
+            height={220}
+            chartConfig={{
+              backgroundColor: 'red',
+              backgroundGradientFrom: 'black',
+              backgroundGradientTo: 'red',
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {},
+              title: 'Temperatura'
+            }}
+            bezier
+            style={styles.grafica}
+          />
+        )
+        break;
+      case 'hum':
+        return (
+          <LineChart
+            data={{
+              labels: JSON.parse(value).slice(0, 10).map(valor => {
+                return(valor.id)
+              }),
+              datasets: [
+                {
+                  data: JSON.parse(value).slice(0, 10).map(valor => {
+                    return(valor.h)
+                  }),
+                  strokeWidth: 2
+                },
+              ],
+            }}
+            width={Dimensions.get('window').width}
+            height={220}
+            chartConfig={{
+              backgroundColor: 'blue',
+              backgroundGradientFrom: 'black',
+              backgroundGradientTo: 'blue',
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {},
+              title: 'Humedad'
+            }}
+            bezier
+            style={styles.grafica}
+          />
+        )
+        break;
+      case 'pre':
+        return (
+          <LineChart
+            data={{
+              labels: JSON.parse(value).slice(0, 10).map(valor => {
+                return(valor.id)
+              }),
+              datasets: [
+                {
+                  data: JSON.parse(value).slice(0, 10).map(valor => {
+                    return(valor.p)
+                  }),
+                  strokeWidth: 2
+                },
+              ],
+            }}
+            width={Dimensions.get('window').width}
+            height={220}
+            chartConfig={{
+              backgroundColor: 'green',
+              backgroundGradientFrom: 'black',
+              backgroundGradientTo: 'green',
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {},
+              title: 'Presión'
+            }}
+            bezier
+            style={styles.grafica}
+          />
+        )
+        break;
+    }
+  }
+
   useEffect(() => {
     getItem(key_sensor1);
     // clearAll();
@@ -90,71 +193,43 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={'black'} />
-        <View style={styles.data}>
-          <Button title="Tomar muestra" onPress={() => readSensor1()} />
-          {(temp && hum && pre) &&
-            <Text>{temp}[°C]   {hum}%   {pre}[Pa]</Text>}
-          <Button title="Almacenar muestra" onPress={() => storeSensor1()} />
-        </View>
-        <ScrollView style={styles.scroll}>
-          {(value) &&
-            <DataTable style={styles.table}>
-              <DataTable.Header style={styles.header}>
-                <DataTable.Title style={styles.columnId}>#</DataTable.Title>
-                <DataTable.Title style={styles.columnFecha}>Fecha</DataTable.Title>
-                <DataTable.Title style={styles.columnDato}>T[°C]</DataTable.Title>
-                <DataTable.Title style={styles.columnDato}>H[%]</DataTable.Title>
-                <DataTable.Title style={styles.columnDato}>P[Pa]</DataTable.Title>
-              </DataTable.Header>
-              {
-                JSON.parse(value).map(valor => {
-                  return (
-                    <DataTable.Row key={valor.id}>
-                      <DataTable.Cell style={styles.columnId} numeric>{valor.id}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnFecha} numeric>{valor.f}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnDato} numeric>{valor.t}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnDato} numeric>{valor.h}</DataTable.Cell>
-                      <DataTable.Cell style={styles.columnDato} numeric>{valor.p}</DataTable.Cell>
-                    </DataTable.Row>
-                  )
-                })
-              }
-            </DataTable>
-          }
-        </ScrollView>
-        <View style={styles.grafica}>
-          {(value) &&
-            <LineChart
-              data={{
-                labels: JSON.parse(value).slice(0, 10).map(valor => {
-                  return(valor.id)
-                }),
-                datasets: [
-                  {
-                    data: JSON.parse(value).slice(0, 10).map(valor => {
-                      return(valor.t)
-                    }),
-                    strokeWidth: 2
-                  },
-                ],
-              }}
-              width={Dimensions.get('window').width}
-              height={220}
-              chartConfig={{
-                backgroundColor: '#e26a00',
-                backgroundGradientFrom: '#fb8c00',
-                backgroundGradientTo: '#ffa726',
-                decimalPlaces: 2,
-                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                style: {},
-                title: 'Temperatura'
-              }}
-              bezier
-              style={{}}
-            />
-          }
-        </View>
+      <StatusBar backgroundColor={'black'} /> 
+      <View style={styles.data}>
+        <Button title="Tomar muestra" onPress={() => readSensor1()} />
+        {(temp && hum && pre) &&
+          <Text>{temp}[°C]   {hum}%   {pre}[Pa]</Text>}
+        <Button title="Almacenar muestra" onPress={() => storeSensor1()} />
+      </View>
+      <Text>Presione sobre una de las letras para ver su gráfica</Text>
+      <DataTable style={styles.table}>
+        <DataTable.Header style={styles.header}>
+          <DataTable.Title style={styles.columnId}>#</DataTable.Title>
+          <DataTable.Title style={styles.columnFecha}>Fecha</DataTable.Title>
+          <DataTable.Title style={styles.columnDato} onPress={() => setGraf('temp')}>T[°C]</DataTable.Title>
+          <DataTable.Title style={styles.columnDato} onPress={() => setGraf('hum')}>H[%]</DataTable.Title>
+          <DataTable.Title style={styles.columnDato} onPress={() => setGraf('pre')}>P[Pa]</DataTable.Title>
+        </DataTable.Header>
+        {(value) &&
+          <ScrollView style={styles.scroll}>
+            {
+              JSON.parse(value).map(valor => {
+                return (
+                  <DataTable.Row key={valor.id}>
+                    <DataTable.Cell style={styles.columnId} numeric>{valor.id}</DataTable.Cell>
+                    <DataTable.Cell style={styles.columnFecha} numeric>{valor.f}</DataTable.Cell>
+                    <DataTable.Cell style={styles.columnDato} numeric>{valor.t}</DataTable.Cell>
+                    <DataTable.Cell style={styles.columnDato} numeric>{valor.h}</DataTable.Cell>
+                    <DataTable.Cell style={styles.columnDato} numeric>{valor.p}</DataTable.Cell>
+                  </DataTable.Row>
+                )
+              })
+            }
+          </ScrollView>
+        }
+      </DataTable>
+      {(value) &&
+        renderGrafica(graf)
+      }
     </SafeAreaView>
   );
 };
@@ -166,20 +241,17 @@ export default () => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
     alignItems: 'center'
   },
   data: {
     paddingVertical: 25
   },
-  scroll: {
-    height: 100,
-    alignSelf:'stretch',
-    paddingHorizontal: 5
-  },
   table: {
+    flex: 1,
     borderStartColor: 'solid',
     borderColor: 'white'
+  },
+  scroll: {
   },
   columnFecha: {
     flex: 50,
@@ -197,6 +269,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#DCDCDC'
   },
   grafica: {
-    padding: 0
-  }
+    justifyContent: 'flex-end'
+  },
 });
