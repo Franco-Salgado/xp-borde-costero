@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.xpbordecostero.app-mergeDebugResources-27:/values-v18/values-v18.xml",
+            "outputFile": "com.xpbordecostero.app-mergeDebugResources-31:/values-v18/values-v18.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Jorge\\.gradle\\caches\\transforms-3\\1b40e4574e76bff5831ef4bf4270480d\\transformed\\appcompat-1.4.1\\res\\values-v18\\values-v18.xml",
+                    "source": "C:\\Users\\Jorge\\.gradle\\caches\\transforms-3\\a004d83b37aa0c3b1baa5cf8f601ce18\\transformed\\appcompat-1.4.1\\res\\values-v18\\values-v18.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

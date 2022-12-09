@@ -20,7 +20,7 @@ import {
     FlatList,
     TouchableHighlight,
   } from 'react-native';
-
+//Maneja la navegación de la app
 const Stack = createNativeStackNavigator()
 const MainStack = () => {
     return (

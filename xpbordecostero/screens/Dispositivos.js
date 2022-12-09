@@ -17,31 +17,37 @@ import { LineChart } from "react-native-chart-kit";
 import image from '../assets/BordeCostero.png'
 import TomarMuestra from "../components/button";
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-  import BleManager from 'react-native-ble-manager/BleManager';
-  import { Buffer } from 'buffer';
-  const BleManagerModule = NativeModules.BleManager;
-  const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+import BleManager from 'react-native-ble-manager/BleManager';
+import { Buffer } from 'buffer';
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const Dispositivos = ({route, navigation}) => {
+  //Variables 
     const [isScanning, setIsScanning] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
     const key_sensor1 = '@Sensor1';
+    const [flag, setFlag] = useState(0);
     const [value, setValue] = useState();
     const [id, setId] = useState(0);
+    //Dispositivo recolectado en la pantalla anterior
     const {dispositivo} = route.params;
+    //Variables de datos recolectados
     const [temp, setTemp] = useState();
     const [hum, setHum] = useState();
     const [pre, setPre] = useState();
     const [temp2, setTemp2] = useState();
     const [uv, setUv] = useState();
     const [sensor, setSensor] = useState("");
+    //Variables de manejo de datos
     const [graf, setGraf] = useState('temp');
     const [tabla, setTabla] = useState('primeras tres');
     const peripherals = new Map();
     const [list, setList] = useState([]);
-    const [clickeable, setClickeable] = useState(true);
+    const [clickeable, setClickeable] = useState(false);
     var sensor1 = [];
 
+    //Guardar cosas en la memoria
     const setItem = async (key, dato) => {
         try {
           console.log('SET: ', dato);
@@ -50,7 +56,8 @@ const Dispositivos = ({route, navigation}) => {
           alert('Error al almacenar');
         }
       }
-
+    
+    //Obtiene información de la memoria
     const getItem = async (key) => {
         try {
           setValue(await AsyncStorage.getItem(key));
@@ -59,15 +66,16 @@ const Dispositivos = ({route, navigation}) => {
           alert('Error al recuperar');
         }
       }
-    
-      clearAll = async () => {
+    //Limpia la memoria
+    const clearAll = async () => {
         try {
           await AsyncStorage.clear()
         } catch(e) {
           alert('Error en el clear')
         }
       }
-
+    //Funciones del Bluetooth
+    //Manejo del dispositivo
     const startScan = () => {
           if (!isScanning) {
             BleManager.scan([], 3, true).then((results) => {
@@ -122,7 +130,7 @@ const Dispositivos = ({route, navigation}) => {
           peripherals.set(peripheral.id, peripheral);
           setList(Array.from(peripherals.values()));
         }
-
+    //Conexion y prueba del dispositivo
     const testPeripheral = (peripheral) => {
         if (peripheral){
           if (peripheral.connected){
@@ -147,8 +155,9 @@ const Dispositivos = ({route, navigation}) => {
         }
     
       }
-    
+      //Almacenar los datos recividos
       const storeSensor1 = () => {
+        setFlag(flag+1);
         const fecha = getCurrentDate();
         if (value) {
           sensor1 = JSON.parse(value);
@@ -159,7 +168,7 @@ const Dispositivos = ({route, navigation}) => {
         setValue(JSON.stringify(sensor1));
         setItem(key_sensor1, JSON.stringify(sensor1));
       }
-
+      //Obtener la fecha actual
       const getCurrentDate = () => {
         var date = new Date().getDate();
         var month = new Date().getMonth() + 1;
@@ -171,7 +180,7 @@ const Dispositivos = ({route, navigation}) => {
         return date + '-' + month + '-' + year + " " + hour + ":" + minute + ":" + seconds;
       }
     
-    
+    //Recibir los datos del sensor
     const readSensor = (peripheralId) => {
         BleManager.retrieveServices(peripheralId).then((peripheralData) =>{
           for (key in peripheralData["characteristics"]){
@@ -198,7 +207,7 @@ const Dispositivos = ({route, navigation}) => {
                         text += String.fromCharCode(buffer[member]);
                       }
                     }
-                    setTemp(text);
+                    setTemp(parseFloat(text));
                     console.log(text);
                   })
                   .catch((error) => {
@@ -227,7 +236,7 @@ const Dispositivos = ({route, navigation}) => {
                         text += String.fromCharCode(buffer[member]);
                       }
                     }
-                    setHum(text);
+                    setHum(parseFloat(text));
                     console.log(text);
                   })
                   .catch((error) => {
@@ -257,7 +266,7 @@ const Dispositivos = ({route, navigation}) => {
                       }
                     }
                     console.log(text);
-                    setPre(text);
+                    setPre(parseFloat(text));
                   })
                   .catch((error) => {
                     // Failure code
@@ -285,7 +294,7 @@ const Dispositivos = ({route, navigation}) => {
                         text += String.fromCharCode(buffer[member]);
                       }
                     }
-                    setTemp2(text);
+                    setTemp2(parseFloat(text));
                     console.log(text);
                   })
                   .catch((error) => {
@@ -314,7 +323,7 @@ const Dispositivos = ({route, navigation}) => {
                         text += String.fromCharCode(buffer[member]);
                       }
                     }
-                    setUv(text);
+                    setUv(parseFloat(text));
                     console.log(text);
                   })
                   .catch((error) => {
@@ -324,12 +333,11 @@ const Dispositivos = ({route, navigation}) => {
                 break;
             }
           }
-    
         }).catch((error) => {
           console.log('Connection error', error);
         });
       }
-    
+      //Renderiza la tabla
       const renderTabla = (vInd) => {
         switch (vInd) {
           case 'primeras tres':
@@ -372,7 +380,7 @@ const Dispositivos = ({route, navigation}) => {
                   <DataTable.Title style={styles.columnFecha}>Fecha</DataTable.Title>
                   <DataTable.Title style={styles.columnFlecha} onPress={() => setTabla('primeras tres')}>←→</DataTable.Title>
                   <DataTable.Title style={styles.columnDato} onPress={() => setGraf('temp2')}>T[°C]</DataTable.Title>
-                  <DataTable.Title style={styles.columnDato} onPress={() => setGraf('uv')}>UV%</DataTable.Title>
+                  <DataTable.Title style={styles.columnDato} onPress={() => setGraf('uv')}>UV[mW/cm^2]</DataTable.Title>
                   <DataTable.Cell style={styles.columnDato}></DataTable.Cell>
                 </DataTable.Header>
                 {(value) &&
@@ -398,6 +406,7 @@ const Dispositivos = ({route, navigation}) => {
           break;
         }
       }
+      //Renderiza la grafica
       const renderGrafica = (vDep) => {
         switch (vDep) {
           case 'temp':
@@ -562,15 +571,16 @@ const Dispositivos = ({route, navigation}) => {
             break;
         }
       }
-
+      //Conecta con la memoria al entrar
       useEffect(() => {
         getItem(key_sensor1);
         // clearAll();
       }, [])
-
+      //Conecta con el dispositivo al entrar a la screen
       useEffect(() => {
         testPeripheral(dispositivo);
       },[])
+      //Inicializa las variables ble
       useEffect(() => {
         BleManager.start({showAlert: false});
     
@@ -604,31 +614,23 @@ const Dispositivos = ({route, navigation}) => {
         })
       }, []);
 
-
+      //Maneja la lectura de datos
       const datosSet = () => {
         if (value) {setId(JSON.parse(value)[0].id+1);}
-            var times = 0;
-            setClickeable(false);
-            const interval = setInterval(() => {
-              if (times < 4){
-                readSensor(sensor);
-                console.log("true");
-                times += 1;
-              } else {
-                setClickeable(true);
-                clearInterval(interval)
-              }
-            }, 5000);
+        readSensor(sensor);
+        setClickeable(true);
           }
     return (
       <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={'black'} />
       <View style={styles.data}>
-        <Button title="Tomar muestra" onPress={() => datosSet()} />
+        <TomarMuestra onPress={() => datosSet()} />
         {(temp && hum && pre && temp2 && uv) &&
-          <Text>{temp}[°C]   {hum}%   {pre}[Pa]   {temp2}[°C]   {uv}%</Text>}
+          <Text style = {{color: Colors.white}}>Temperatura:{temp}[°C]   Humedad:{hum}%   Presión:{pre}[Pa]   Sensor sumergible:{temp2}[°C]   UV:{uv}[mW/cm^2]</Text>}
+        <Button title={"Almacenar"} disabled={!clickeable} onPress={() => {storeSensor1();
+        setClickeable(false)}}/>
       </View>
-      <Text>Presione sobre una de las letras para ver su gráfica</Text>
+      <Text style = {{color: Colors.white}} >Presione sobre una de las letras para ver su gráfica</Text>
       {renderTabla(tabla)}
       {(value) &&
         renderGrafica(graf)
@@ -677,17 +679,21 @@ const styles = StyleSheet.create({
   },
   columnFecha: {
     flex: 33,
+    backgroundColor: Colors.white,
     justifyContent: 'center'
   },
   columnDato: {
+    backgroundColor: Colors.white,
     flex: 8,
     justifyContent: 'center'
   },
   columnFlecha: {
+    backgroundColor: Colors.white,
     flex: 6,
     justifyContent: 'center'
   },
   columnId: {
+    backgroundColor: Colors.white,
     flex: 4,
     justifyContent: 'center'
   },

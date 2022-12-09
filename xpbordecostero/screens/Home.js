@@ -29,12 +29,13 @@ const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 const Home = ({navigation}) => {
+  //Variables del manejo del dispositivo
     const [isScanning, setIsScanning] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
     const [flagS, setFlagS] = useState(true);
     const [list, setList] = useState([]);
     const peripherals = new Map();
-    
+  //Escanea los dispositivos
     const startScan = () => {
         if (!isScanning) {
         BleManager.scan([], 3, true).then((results) => {
@@ -46,12 +47,12 @@ const Home = ({navigation}) => {
         });
         }    
     }
-
+  //Maneja el detener los dispositivos
     const handleStopScan = () => {
         console.log('Scan is stopped');
         setIsScanning(false);
     }
-
+  //Maneja la desconexion
     const handleDisconnectedPeripheral = (data) => {
         let peripheral = peripherals.get(data.peripheral);
         if (peripheral) {
@@ -65,7 +66,7 @@ const Home = ({navigation}) => {
     const handleUpdateValueForCharacteristic = (data) => {
     console.log('Received data from ' + data.peripheral + ' characteristic ' + data.characteristic, data.value);
   }
-
+  //Recibe el dispositivo conectado
   const retrieveConnected = () => {
     BleManager.getConnectedPeripherals([]).then((results) => {
       if (results.length == 0) {
@@ -80,7 +81,7 @@ const Home = ({navigation}) => {
       }
     });
   }
-
+  //Maneja los dispositivos descubiertos y les asigna un nombre si es que no tienen
   const handleDiscoverPeripheral = (peripheral) => {
     console.log('Got ble peripheral', peripheral);
     if (!peripheral.name) {
@@ -89,7 +90,7 @@ const Home = ({navigation}) => {
     peripherals.set(peripheral.id, peripheral);
     setList(Array.from(peripherals.values()));
   }
-
+  //Conexion con el dispositivo
  const  testPeripheral = (peripheral) => {
     if (peripheral){
       if (peripheral.connected){
@@ -112,21 +113,21 @@ const Home = ({navigation}) => {
         });
       }
     }}
-
+    //Lista de dispositivos
     const renderItem = (item) => {
         
         return (
           <TouchableHighlight onPress={() => navigation.navigate('Dispositivos', {dispositivo: item})}>
             <View style = {{alignSelf:'center'}}>
-              <Text >{item.name}</Text>
-              <Text >RSSI: {item.rssi}</Text>
-              <Text >{item.id}</Text>
+              <Text style = {{color: Colors.white}}>{item.name}</Text>
+              <Text style = {{color: Colors.white}}>RSSI: {item.rssi}</Text>
+              <Text style = {{color: Colors.white}}>{item.id}</Text>
             </View>
           </TouchableHighlight>
         );
       }
 
-
+    //Inicializacion del ble
       useEffect(() => {
         BleManager.start({showAlert: false});
     
@@ -165,11 +166,6 @@ const Home = ({navigation}) => {
             <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
-            {/* {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-                <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-            )} */}
             <View style={styles.body}>
             <Image source ={require('../assets/BordeCostero.png')} style = {styles.image}/>
             <View style={{margin: 10}}>
