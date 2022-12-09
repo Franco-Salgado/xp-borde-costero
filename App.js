@@ -17,7 +17,7 @@ const App = () => {
   const [uv, setUv] = useState();
 
   const [graf, setGraf] = useState('temp');
-  const [tabla, setTabla] = useState('ultimas dos');
+  const [tabla, setTabla] = useState('primeras tres');
   const [modalVisible, setModalVisible] = useState(false);
 
   var sensor1 = [];
@@ -87,7 +87,7 @@ const App = () => {
     var minute = new Date().getMinutes();
     var seconds = new Date().getSeconds();
     var mseconds = new Date().getMilliseconds();
-    return date + '-' + month + '-' + year + " " + hour + ":" + minute + ":" + seconds + ":" + mseconds;
+    return date + '-' + month + '-' + year + " " + hour + ":" + minute + ":" + seconds;
   }
 
   const renderModal = () => {
@@ -103,10 +103,10 @@ const App = () => {
             <DataTable.Header style={styles.header}>
               <DataTable.Title style={styles.columnId}>#</DataTable.Title>
               <DataTable.Title style={styles.columnFecha}>Fecha</DataTable.Title>
+              <DataTable.Title style={styles.columnFlecha} onPress={() => setTabla('ultimas dos')}>←→</DataTable.Title>
               <DataTable.Title style={styles.columnDato} onPress={() => setGraf('temp')}>T[°C]</DataTable.Title>
               <DataTable.Title style={styles.columnDato} onPress={() => setGraf('hum')}>H%</DataTable.Title>
               <DataTable.Title style={styles.columnDato} onPress={() => setGraf('pre')}>P[Pa]</DataTable.Title>
-              <DataTable.Title style={styles.columnFlecha} onPress={() => setTabla('ultimas dos')}>→</DataTable.Title>
             </DataTable.Header>
             {(value) &&
               <ScrollView style={styles.scroll}>
@@ -116,10 +116,10 @@ const App = () => {
                       <DataTable.Row key={valor.id}>
                         <DataTable.Cell style={styles.columnId} numeric>{valor.id}</DataTable.Cell>
                         <DataTable.Cell style={styles.columnFecha} numeric>{valor.f}</DataTable.Cell>
+                        <DataTable.Cell style={styles.columnFlecha}></DataTable.Cell>
                         <DataTable.Cell style={styles.columnDato} numeric>{valor.t}</DataTable.Cell>
                         <DataTable.Cell style={styles.columnDato} numeric>{valor.h}</DataTable.Cell>
                         <DataTable.Cell style={styles.columnDato} numeric>{valor.p}</DataTable.Cell>
-                        <DataTable.Cell style={styles.columnFlecha}></DataTable.Cell>
                       </DataTable.Row>
                     )
                   })
@@ -135,9 +135,10 @@ const App = () => {
             <DataTable.Header style={styles.header}>
               <DataTable.Title style={styles.columnId}>#</DataTable.Title>
               <DataTable.Title style={styles.columnFecha}>Fecha</DataTable.Title>
-              <DataTable.Title style={styles.columnFlecha} onPress={() => setTabla('primeras tres')}>←</DataTable.Title>
+              <DataTable.Title style={styles.columnFlecha} onPress={() => setTabla('primeras tres')}>←→</DataTable.Title>
               <DataTable.Title style={styles.columnDato} onPress={() => setGraf('temp2')}>T[°C]</DataTable.Title>
               <DataTable.Title style={styles.columnDato} onPress={() => setGraf('uv')}>UV%</DataTable.Title>
+              <DataTable.Cell style={styles.columnDato}></DataTable.Cell>
             </DataTable.Header>
             {(value) &&
               <ScrollView style={styles.scroll}>
@@ -150,6 +151,7 @@ const App = () => {
                         <DataTable.Cell style={styles.columnFlecha}></DataTable.Cell>
                         <DataTable.Cell style={styles.columnDato} numeric>{valor.t2}</DataTable.Cell>
                         <DataTable.Cell style={styles.columnDato} numeric>{valor.uv}</DataTable.Cell>
+                        <DataTable.Cell style={styles.columnDato}></DataTable.Cell>
                       </DataTable.Row>
                     )
                   })
@@ -412,19 +414,19 @@ const styles = StyleSheet.create({
   scroll: {
   },
   columnFecha: {
-    flex: 50,
+    flex: 33,
     justifyContent: 'center'
   },
   columnDato: {
-    flex: 12,
+    flex: 8,
     justifyContent: 'center'
   },
   columnFlecha: {
-    flex: 5,
+    flex: 6,
     justifyContent: 'center'
   },
   columnId: {
-    flex: 5,
+    flex: 4,
     justifyContent: 'center'
   },
   header: {
