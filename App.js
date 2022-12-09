@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button, ScrollView, SafeAreaView, StatusBar, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Button, ScrollView, SafeAreaView, StatusBar, Dimensions, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DataTable } from 'react-native-paper';
 import { LineChart } from "react-native-chart-kit";
@@ -18,6 +18,7 @@ const App = () => {
 
   const [graf, setGraf] = useState('temp');
   const [tabla, setTabla] = useState('ultimas dos');
+  const [modalVisible, setModalVisible] = useState(false);
 
   var sensor1 = [];
 
@@ -87,6 +88,10 @@ const App = () => {
     var seconds = new Date().getSeconds();
     var mseconds = new Date().getMilliseconds();
     return date + '-' + month + '-' + year + " " + hour + ":" + minute + ":" + seconds + ":" + mseconds;
+  }
+
+  const renderModal = () => {
+    setModalVisible(!modalVisible)
   }
 
   // Tabla
@@ -330,7 +335,27 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={'black'} /> 
+      <StatusBar backgroundColor={'black'} />
+      <Button title="Escanear dispositivos" onPress={() => renderModal()}/>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>Dispositivo 1</Text>
+            <Text>Dispositivo 2</Text>
+            <Text>Dispositivo 3</Text>
+            <Text>Dispositivo 4</Text>
+            <Text>Dispositivo 5</Text>
+            <Button title="Cerrar" onPress={() => renderModal()}/>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.data}>
         <Button title="Tomar muestra" onPress={() => readSensor1()} />
         {(temp && hum && pre && temp2 && uv) &&
@@ -354,6 +379,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
   data: {
     paddingVertical: 25
