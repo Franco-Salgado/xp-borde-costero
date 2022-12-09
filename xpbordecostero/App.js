@@ -1,38 +1,38 @@
-// /**
-//  * Sample BLE React Native App
-//  *
-//  * @format
-//  * @flow strict-local
-//  */
+/**
+ * Sample BLE React Native App
+ *
+ * @format
+ * @flow strict-local
+ */
+import AsyncStorage from '@react-native-async-storage/async-storage';
+ import React, {
+  useState,
+  useEffect,
+} from 'react';
+import {
+  Alert,
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  StatusBar,
+  NativeModules,
+  NativeEventEmitter,
+  Button,
+  Platform,
+  PermissionsAndroid,
+  FlatList,
+  TouchableHighlight,
+} from 'react-native';
 
-//  import React, {
-//   useState,
-//   useEffect,
-// } from 'react';
-// import {
-//   Alert,
-//   SafeAreaView,
-//   StyleSheet,
-//   ScrollView,
-//   View,
-//   Text,
-//   StatusBar,
-//   NativeModules,
-//   NativeEventEmitter,
-//   Button,
-//   Platform,
-//   PermissionsAndroid,
-//   FlatList,
-//   TouchableHighlight,
-// } from 'react-native';
+import {
+  Colors,
+} from 'react-native/Libraries/NewAppScreen';
 
-// import {
-//   Colors,
-// } from 'react-native/Libraries/NewAppScreen';
+import BleManager from 'react-native-ble-manager/BleManager';
 
-// import BleManager from 'react-native-ble-manager/BleManager';
-
-// import { Buffer } from 'buffer';
+import { Buffer } from 'buffer';
 // const BleManagerModule = NativeModules.BleManager;
 // const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
@@ -453,10 +453,10 @@
 //   );
 // };
 import MainStack from "./navigation/MainStack";
-import {
-  StyleSheet,
-  View,
-} from 'react-native';
+// import {
+//   StyleSheet,
+//   View,
+// } from 'react-native';
 
 
 const App = () => {

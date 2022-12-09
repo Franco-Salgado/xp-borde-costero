@@ -1,6 +1,7 @@
 import { View, StyleSheet,Image} from 'react-native';
 import TomarMuestra from "../components/button";
 import image from '../assets/BordeCostero.png'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     Alert,
     SafeAreaView,
@@ -31,7 +32,7 @@ const Home = ({navigation}) => {
     const [isScanning, setIsScanning] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
     const [flagS, setFlagS] = useState(true);
-    const [list, setList] = useState([{"id": "id", "rssi": "rssi", "name": "name"}, {"id": "id", "rssi": "rssi", "name": "name"}, {"id": "id", "rssi": "rssi", "name": "name"}]);
+    const [list, setList] = useState([]);
     const peripherals = new Map();
     
     const startScan = () => {
@@ -174,7 +175,7 @@ const Home = ({navigation}) => {
             <View style={{margin: 10}}>
                 <Button 
                 title={'Escanear Dispositivos (' + (isScanning ? 'on' : 'off') + ')'}
-                onPress={() => setFlagS(true) } 
+                onPress={() => startScan() } 
                 />            
             </View>
             {(list.length > 0 && !isConnected) &&
