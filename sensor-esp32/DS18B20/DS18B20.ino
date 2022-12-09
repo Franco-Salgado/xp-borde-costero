@@ -10,6 +10,11 @@ OneWire oneWire(oneWireBus);
 // Pass our oneWire reference to Dallas Temperature sensor 
 DallasTemperature sensors(&oneWire);
 
+//Sensor UV
+//pin definitions
+int UV_OUT = 13;    //Sensor Output
+int REF_3V3 = 26;   //3.3V power on the Arduino board
+
 //bme280 libraries
 #include <Wire.h>
 #include <Adafruit_BME280.h>
@@ -36,6 +41,7 @@ Adafruit_BME280 bme;
 #define HUM_CHARACTERISTIC_UUID "b9d456ea-5ab6-4350-adc0-10e2272b87df"
 #define PRESS_CHARACTERISTIC_UUID "5d5e967f-b7ee-4fdf-926c-219ee25e8bcc"
 #define TEMP_DS18B20_CHARACTERISTIC_UUID "7e133607-da9c-4444-b622-f8421eb2ba71"
+#define UV_ML8511_CHARACTERISTIC_UUID "c5e758bb-6698-4f7c-b232-d7f19ab2d57f"
 
 BLEServer *pServer;
 BLEService *pService;
@@ -44,6 +50,7 @@ BLECharacteristic *pCharacteristicTemp;
 BLECharacteristic *pCharacteristicHum;
 BLECharacteristic *pCharacteristicPress;
 BLECharacteristic *pCharacteristicTempDS18B20;
+BLECharacteristic *pCharacteristicUVml8511;
 
 
 void setup() {
@@ -51,7 +58,7 @@ void setup() {
   Serial.println("Starting BLE work!");
   sensors.begin();
 
-  BLEDevice::init("DS18B20");
+  BLEDevice::init("ESP32-Sensor");
   pServer = BLEDevice::createServer();
   pService = pServer->createService(SERVICE_UUID);
   pCharacteristic = pService->createCharacteristic(
@@ -82,7 +89,14 @@ void setup() {
                                          TEMP_DS18B20_CHARACTERISTIC_UUID,
                                          BLECharacteristic::PROPERTY_READ |
                                          BLECharacteristic::PROPERTY_WRITE
-                                       );         
+                                       );
+                                       
+  pCharacteristicUVml8511 = pService->createCharacteristic(
+                                         UV_ML8511_CHARACTERISTIC_UUID,
+                                         BLECharacteristic::PROPERTY_READ |
+                                         BLECharacteristic::PROPERTY_WRITE
+                                       );
+  
   pService->start();
   // BLEAdvertising *pAdvertising = pServer->getAdvertising();  // this still is working for backward compatibility
   BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
@@ -103,15 +117,44 @@ void setup() {
 }
 
 void loop() {
+  int uv_Level = analogRead_average(UV_OUT);
+  int ref_Level = analogRead_average(REF_3V3);
+  float output_Voltage = 3.3 / ref_Level * uv_Level;
+  float uvIntensity = mapfloat(output_Voltage, 0.99, 2.8, 0.0, 15.0);
+ 
   sensors.requestTemperatures();
   std::string temp = std::to_string(bme.readTemperature());
   std::string hum = std::to_string(bme.readHumidity());
   std::string press = std::to_string(bme.readPressure());
   std::string tempds18b20 = std::to_string(sensors.getTempCByIndex(0));
+  std::string uvml8511 = std::to_string(uvIntensity);
 
   pCharacteristicTemp->setValue(temp);
   pCharacteristicHum->setValue(hum);
   pCharacteristicPress->setValue(press);
   pCharacteristicTempDS18B20->setValue(tempds18b20);
+  pCharacteristicUVml8511->setValue(uvml8511);
   delay(2000);
+}
+
+//Uv Functions
+//Takes an average of readings on a given pin
+//Returns the average
+int analogRead_average(int pinToRead)
+{
+  int NumberOfSamples = 8;
+  int runningValue = 0; 
+
+  for(int x = 0; x < NumberOfSamples; x++)
+    runningValue += analogRead(pinToRead);
+  runningValue /= NumberOfSamples;
+
+  return(runningValue);
+}
+
+//The Arduino Map function but for floats
+//From: http://forum.arduino.cc/index.php?topic=3922.0
+float mapfloat(float x, float in_min, float in_max, float out_min, float out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
